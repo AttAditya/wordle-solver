@@ -1,3 +1,5 @@
+from sys import argv
+
 def setup(words, path):
   with open(path, 'r') as f:
     for line in f:
@@ -115,20 +117,22 @@ def main(words, picked, alps):
 
   return guesses
 
-if __name__ == "__main__":
-  alps = "qwertyuioplkjhgfdsazxcvbnm"
-  path = "words.txt"
-  words = []
-  setup(words, path)
+def evaluate(words, alps, start=None, end=None):
+  if start is None:
+    start = int(input())
+
+  if end is None:
+    end = int(input())
+
+  space = words[start:end]
   failed = {}
   solved = {}
-  space = words
 
   for i, picked in enumerate(space):
     total = len(space)
     progress = 100 * (i + 1) / total
     print(
-      f"\rProgess: {progress:.4f}%",
+      f"\rProgress: {progress:.4f}%",
       flush=True, end="",
     )
 
@@ -146,12 +150,54 @@ if __name__ == "__main__":
 
   print("\r")
   print("Failed")
+  print(len(failed))
 
   for score in sorted(failed.keys()):
     print(score, failed[score])
 
   print("Solved")
+  print(len(solved))
 
   for score in sorted(solved.keys()):
     print(score, solved[score])
+
+def play(picked, words, alps):
+  guesses = main(words, picked, alps)
+  print("Guesses:", len(guesses))
+  print(*guesses, sep="\n")
+
+def cli():
+  if len(argv) < 2:
+    print("Usage: python wordle.py <mode>")
+    return
+
+  mode = argv[1]
+
+  if mode == "-p":
+    picked = None
+
+    if len(argv) < 3:
+      picked = input("Enter the picked word: ")
+    else:
+      picked = argv[2]
+
+    play(picked, words, alps)
+    return
+
+  if mode == "-e":
+    start = None
+    end = None
+
+    if len(argv) >= 4:
+      start = int(argv[2])
+      end = int(argv[3])
+
+    evaluate(words, alps, start, end)
+
+if __name__ == "__main__":
+  alps = "qwertyuioplkjhgfdsazxcvbnm"
+  path = "words.txt"
+  words = []
+  setup(words, path)
+  cli()
 
