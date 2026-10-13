@@ -1,5 +1,3 @@
-from random import randint
-
 def setup(words, path):
   with open(path, 'r') as f:
     for line in f:
@@ -63,8 +61,31 @@ def is_valid(word, known, result, alps):
 
   return True
 
-def guess_word(words):
-  return words[randint(0, len(words) - 1)]
+def guess_word(pending_words, alps, _):
+  weights = {c: 0 for c in alps}
+
+  for word in pending_words:
+    for c in {*word}:
+      weights[c] += 1
+
+  max_weight = max(weights.values())
+  min_weight = min(weights.values())
+
+  for c in weights:
+    offset = 1
+    shifted = weights[c] - min_weight
+    downscale = max_weight - min_weight + offset
+    weights[c] = shifted / downscale
+
+  ranked = []
+
+  for word in pending_words:
+    weight = sum(weights[c] for c in {*word})
+    ranked.append((weight, word))
+
+  ranked.sort()
+
+  return ranked[-1][1]
 
 def main(words, picked, alps):
   prev_len = len(words)
@@ -76,10 +97,10 @@ def main(words, picked, alps):
       break
 
     new_words = []
-    guess = guess_word(words)
+    guess = guess_word(words, alps, guesses)
 
     while guesses and guesses[-1] == guess and len(words) > 1:
-      guess = guess_word(words)
+      guess = guess_word(words, alps, guesses)
 
     guesses.append(guess)
     result = wordle_check(picked, guess, alps)
@@ -101,12 +122,14 @@ if __name__ == "__main__":
   setup(words, path)
   failed = {}
   solved = {}
+  space = words
 
-  for i, picked in enumerate(words):
+  for i, picked in enumerate(space):
+    total = len(space)
+    progress = 100 * (i + 1) / total
     print(
-      f"\rProgess: {100 * (i + 1) / len(words):.4f}%",
-      flush=True,
-      end="",
+      f"\rProgess: {progress:.4f}%",
+      flush=True, end="",
     )
 
     guesses = main(words, picked, alps)
