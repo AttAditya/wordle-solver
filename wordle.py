@@ -63,15 +63,15 @@ def is_valid(word, known, result, alps):
 
   return True
 
-def guess_word(pending_words, alps, _):
+def guess_word(pending_words, alps, guesses):
   weights = {c: 0 for c in alps}
 
   for word in pending_words:
     for c in {*word}:
       weights[c] += 1
 
-  max_weight = max(weights.values())
-  min_weight = min(weights.values())
+  max_weight = sum(weights.values())
+  min_weight = 0
 
   for c in weights:
     offset = 1
@@ -79,43 +79,54 @@ def guess_word(pending_words, alps, _):
     downscale = max_weight - min_weight + offset
     weights[c] = shifted / downscale
 
+  weights['a'] **= 2
+  weights['e'] **= 2
+  weights['i'] **= 2
+  weights['o'] **= 2
+  weights['u'] **= 2
   ranked = []
 
   for word in pending_words:
     weight = sum(weights[c] for c in {*word})
     ranked.append((weight, word))
 
-  ranked.sort()
+  ranked.sort(
+    key=lambda x: abs(0.2 - x[0] / 5),
+    reverse=True,
+  )
 
   return ranked[-1][1]
 
 def main(words, picked, alps):
-  prev_len = len(words)
-  curr_len = len(words) + 1
   guesses = []
 
-  while prev_len != curr_len:
+  while len(words) > 1:
     if not words:
       break
 
-    new_words = []
     guess = guess_word(words, alps, guesses)
-
-    while guesses and guesses[-1] == guess and len(words) > 1:
-      guess = guess_word(words, alps, guesses)
-
-    guesses.append(guess)
     result = wordle_check(picked, guess, alps)
+    guesses.append(guess)
+    new_words = []
 
     for word in words:
       if is_valid(word, guess, result, alps):
         new_words.append(word)
 
     words = new_words
-    prev_len = curr_len
-    curr_len = len(words)
 
-  return guesses
+  if words:
+    guesses.append(words[0])
+
+  unique_guesses = {*[]}
+  result = []
+
+  for guess in guesses:
+    if guess not in unique_guesses:
+      unique_guesses.add(guess)
+      result.append(guess)
+
+  return result
 
 def evaluate(words, alps, start=None, end=None):
   if start is None:
