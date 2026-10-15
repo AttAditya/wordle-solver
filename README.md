@@ -4,7 +4,8 @@ A Wordle game solver implemented in Python with parallel evaluation capabilities
 
 ## Features
 
-- **Play mode**: Solve a specific Wordle puzzle interactively
+- **Play mode**: Solve a specific Wordle puzzle automatically
+- **Interactive mode**: Play Wordle and provide feedback manually
 - **Evaluate mode**: Benchmark the solver against a range of words from the dictionary
 - **Parallel evaluation**: Run evaluations across multiple processes for speed
 - **Letter frequency weighting**: Uses character frequency analysis to rank guesses
@@ -21,11 +22,16 @@ A Wordle game solver implemented in Python with parallel evaluation capabilities
 
 ## Usage
 
-### Play a specific word
+### Solve for a specific word
 ```bash
 python3 wordle.py -p <word>
-# or interactively:
+# or provide word when prompted:
 python3 wordle.py -p
+```
+
+### Play interactively
+```bash
+python3 wordle.py -i
 ```
 
 ### Evaluate solver performance
