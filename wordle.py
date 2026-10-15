@@ -64,6 +64,9 @@ def is_valid(word, known, result, alps):
   return True
 
 def guess_word(pending_words, alps, guesses):
+  if len(guesses) < 1:
+    return "slate"
+
   weights = {c: 0 for c in alps}
 
   for word in pending_words:
