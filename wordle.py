@@ -161,6 +161,10 @@ def evaluate(words, alps, start=None, end=None):
       scores[score] = 0
 
     scores[score] += 1
+    print(
+      f"\rSolved: {picked}, Guesses ({score}): {guesses}",
+      flush=True, end="\n"
+    )
 
   print("\r")
   print("Failed")

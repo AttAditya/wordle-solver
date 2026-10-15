@@ -25,12 +25,15 @@ while [ $num -lt $limit ]; do
   idx=$((idx + 1))
 done
 
+python3 progress.py &
+
 wait
 
 results=$(cat logs/*)
 results=$(echo "$results" | grep -iv 'progress')
 results=$(echo "$results" | grep -iv 'solved')
 results=$(echo "$results" | grep -iv 'failed')
+results=$(echo "$results" | grep -iv '\r')
 
 echo "$idx\n$results" | python3 merge.py > logs/res.log
 cat logs/res.log
