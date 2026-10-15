@@ -180,6 +180,38 @@ def play(picked, words, alps):
   print("Guesses:", len(guesses))
   print(*guesses, sep="\n")
 
+def feedback(guess):
+  result = input(f"Feedback for {guess}: ")
+
+  return [c for c in result.strip()]
+
+def interactive(words, alps):
+  guesses = []
+
+  while len(words) > 1:
+    if not words:
+      print("No valid words left.")
+      break
+
+    guess = guess_word(words, alps, guesses)
+    print("Guess:", guess)
+    result = feedback(guess)
+
+    if not result:
+      print("No feedback provided. Exiting.")
+      break
+
+    guesses.append(guess)
+    new_words = []
+
+    for word in words:
+      if is_valid(word, guess, result, alps):
+        new_words.append(word)
+
+    words = new_words
+
+  print("No valid words left.")
+
 def cli():
   if len(argv) < 2:
     print("Usage: python wordle.py <mode>")
@@ -196,6 +228,10 @@ def cli():
       picked = argv[2]
 
     play(picked, words, alps)
+    return
+
+  if mode == "-i":
+    interactive(words, alps)
     return
 
   if mode == "-e":
