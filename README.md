@@ -34,6 +34,12 @@ wordle_solver/
 
 Run the solver using the Python module syntax:
 
+### Select guesser (optional)
+```bash
+# Guesser options: wc (default), wec, rw
+python3 -m wordle_solver -g <guesser> <mode> [args...]
+```
+
 ### Solve for a specific word (Simulation mode)
 ```bash
 python3 -m wordle_solver -p <word>
@@ -56,6 +62,23 @@ python3 -m wordle_solver -e 0 1000
 
 # Custom limits
 ./parallel.sh <limit> <step> <start_num>
+```
+
+## Guesser Options
+
+| Guesser | Description |
+|---------|-------------|
+| `wc` | **WeightedCharsGuesser** (default) - Uses letter frequency weighting to rank guesses |
+| `wec` | **WeightedErroredCharsGuesser** - Weights letters considering error positions |
+| `rw` | **RandomWordGuesser** - Selects random words from candidates |
+
+### Example with guesser selection
+```bash
+# Use WeightedErroredCharsGuesser in simulation mode
+python3 -m wordle_solver -g wec -p crane
+
+# Use RandomWordGuesser in evaluation mode
+python3 -m wordle_solver -g rw -e 0 100
 ```
 
 ## Algorithm
