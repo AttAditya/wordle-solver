@@ -20,12 +20,12 @@ if [ $# -gt 2 ]; then
 fi
 
 while [ $num -lt $limit ]; do
-  python3 wordle.py > logs/res_$idx.log -e $num $((num + step)) &
+  python3 -m wordle_solver > logs/res_$idx.log -e $num $((num + step)) &
   num=$((num + step))
   idx=$((idx + 1))
 done
 
-python3 progress.py &
+python3 helpers/progress.py &
 
 wait
 
@@ -35,6 +35,6 @@ results=$(echo "$results" | grep -iv 'solved')
 results=$(echo "$results" | grep -iv 'failed')
 results=$(echo "$results" | grep -iv '\r')
 
-echo "$idx\n$results" | python3 merge.py > logs/res.log
+echo "$idx\n$results" | python3 helpers/merge.py > logs/res.log
 cat logs/res.log
 

@@ -1,5 +1,5 @@
-from core.engine import run_cli
-from core.setup import fill_words
+from wordle_solver.core.engine import run_cli
+from wordle_solver.core.setup import fill_words
 
 if __name__ == "__main__":
   path = "words.txt"

@@ -1,4 +1,4 @@
-from interfaces.checker import Checker
+from wordle_solver.interfaces.checker import Checker
 
 class ManualChecker(Checker):
   def _validate(self, feedback: str) -> bool:

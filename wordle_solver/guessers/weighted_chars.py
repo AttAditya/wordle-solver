@@ -1,4 +1,4 @@
-from interfaces.guesser import Guesser
+from wordle_solver.interfaces.guesser import Guesser
 
 class WeightedCharsGuesser(Guesser):
   def guess(

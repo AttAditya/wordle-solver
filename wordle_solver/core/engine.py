@@ -1,12 +1,10 @@
 from sys import argv
 
-from guessers.weighted_chars import WeightedCharsGuesser
-
-from interfaces.mode import Mode
-
-from modes.evaluation import EvaluationMode
-from modes.interaction import InteractionMode
-from modes.simulation import SimulationMode
+from wordle_solver.guessers.weighted_chars import WeightedCharsGuesser
+from wordle_solver.interfaces.mode import Mode
+from wordle_solver.modes.evaluation import EvaluationMode
+from wordle_solver.modes.interaction import InteractionMode
+from wordle_solver.modes.simulation import SimulationMode
 
 def run_cli(words: list[str]):
   if len(argv) < 2:

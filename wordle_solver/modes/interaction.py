@@ -1,9 +1,7 @@
-from checkers.manual import ManualChecker
-
-from core.main import simulate
-
-from interfaces.guesser import Guesser
-from interfaces.mode import Mode
+from wordle_solver.checkers.manual import ManualChecker
+from wordle_solver.core.main import simulate
+from wordle_solver.interfaces.guesser import Guesser
+from wordle_solver.interfaces.mode import Mode
 
 class InteractionMode(Mode):
   def __init__(self, words: list[str], guesser: Guesser):

@@ -1,4 +1,4 @@
-from interfaces.checker import Checker
+from wordle_solver.interfaces.checker import Checker
 
 class AutomaticChecker(Checker):
   def __init__(self, correct: str):

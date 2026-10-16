@@ -1,7 +1,6 @@
-from core.validator import is_valid
-
-from interfaces.checker import Checker
-from interfaces.guesser import Guesser
+from wordle_solver.core.validator import is_valid
+from wordle_solver.interfaces.checker import Checker
+from wordle_solver.interfaces.guesser import Guesser
 
 def simulate(
   words: list[str],
