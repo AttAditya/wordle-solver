@@ -5,7 +5,8 @@ def setup(words, path):
     for line in f:
       words.append(line.strip())
 
-def wordle_check(correct, guessed, alps):
+def wordle_check(correct, guessed):
+  alps = {*correct, *guessed}
   positions_correct = {c: {*[]} for c in alps}
   positions_guessed = {c: {*[]} for c in alps}
 
@@ -40,7 +41,8 @@ def wordle_check(correct, guessed, alps):
 
   return result
 
-def is_valid(word, known, result, alps):
+def is_valid(word, known, result):
+  alps = {*word, *known}
   ec = {c: [] for c in alps}
 
   for i, c in enumerate(known):
@@ -87,18 +89,15 @@ def guess_word(pending_words, alps, guesses):
   weights['i'] **= 2
   weights['o'] **= 2
   weights['u'] **= 2
-  ranked = []
+  best = (float('-inf'), '')
 
   for word in pending_words:
     weight = sum(weights[c] for c in {*word})
-    ranked.append((weight, word))
 
-  ranked.sort(
-    key=lambda x: abs(0.2 - x[0] / 5),
-    reverse=True,
-  )
+    if weight > best[0]:
+      best = (weight, word)
 
-  return ranked[-1][1]
+  return best[1]
 
 def main(words, picked, alps):
   guesses = []
@@ -108,12 +107,12 @@ def main(words, picked, alps):
       break
 
     guess = guess_word(words, alps, guesses)
-    result = wordle_check(picked, guess, alps)
+    result = wordle_check(picked, guess)
     guesses.append(guess)
     new_words = []
 
     for word in words:
-      if is_valid(word, guess, result, alps):
+      if is_valid(word, guess, result):
         new_words.append(word)
 
     words = new_words
