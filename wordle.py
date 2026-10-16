@@ -65,10 +65,11 @@ def is_valid(word, known, result):
 
   return True
 
-def guess_word(pending_words, alps, guesses):
+def guess_word(pending_words, guesses):
   if len(guesses) < 1:
     return "slate"
 
+  alps = "qwertyuioplkjhgfdsazxcvbnm"
   weights = {c: 0 for c in alps}
 
   for word in pending_words:
@@ -99,14 +100,14 @@ def guess_word(pending_words, alps, guesses):
 
   return best[1]
 
-def main(words, picked, alps):
+def main(words, picked):
   guesses = []
 
   while len(words) > 1:
     if not words:
       break
 
-    guess = guess_word(words, alps, guesses)
+    guess = guess_word(words, guesses)
     result = wordle_check(picked, guess)
     guesses.append(guess)
     new_words = []
@@ -130,7 +131,7 @@ def main(words, picked, alps):
 
   return result
 
-def evaluate(words, alps, start=None, end=None):
+def evaluate(words, start=None, end=None):
   if start is None:
     start = int(input())
 
@@ -149,7 +150,7 @@ def evaluate(words, alps, start=None, end=None):
       flush=True, end="",
     )
 
-    guesses = main(words, picked, alps)
+    guesses = main(words, picked)
     score = len(guesses)
     scores = failed
 
@@ -178,8 +179,8 @@ def evaluate(words, alps, start=None, end=None):
   for score in sorted(solved.keys()):
     print(score, solved[score])
 
-def play(picked, words, alps):
-  guesses = main(words, picked, alps)
+def play(picked, words):
+  guesses = main(words, picked)
   print("Guesses:", len(guesses))
   print(*guesses, sep="\n")
 
@@ -188,7 +189,7 @@ def feedback(guess):
 
   return [c for c in result.strip()]
 
-def interactive(words, alps):
+def interactive(words):
   guesses = []
 
   while len(words) > 1:
@@ -196,7 +197,7 @@ def interactive(words, alps):
       print("No valid words left.")
       break
 
-    guess = guess_word(words, alps, guesses)
+    guess = guess_word(words, guesses)
     print("Guess:", guess)
     result = feedback(guess)
 
@@ -208,7 +209,7 @@ def interactive(words, alps):
     new_words = []
 
     for word in words:
-      if is_valid(word, guess, result, alps):
+      if is_valid(word, guess, result):
         new_words.append(word)
 
     words = new_words
@@ -230,11 +231,11 @@ def cli():
     else:
       picked = argv[2]
 
-    play(picked, words, alps)
+    play(picked, words)
     return
 
   if mode == "-i":
-    interactive(words, alps)
+    interactive(words)
     return
 
   if mode == "-e":
@@ -245,10 +246,9 @@ def cli():
       start = int(argv[2])
       end = int(argv[3])
 
-    evaluate(words, alps, start, end)
+    evaluate(words, start, end)
 
 if __name__ == "__main__":
-  alps = "qwertyuioplkjhgfdsazxcvbnm"
   path = "words.txt"
   words = []
   setup(words, path)
