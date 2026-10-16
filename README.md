@@ -10,34 +10,46 @@ A Wordle game solver implemented in Python with parallel evaluation capabilities
 - **Parallel evaluation**: Run evaluations across multiple processes for speed
 - **Letter frequency weighting**: Uses character frequency analysis to rank guesses
 
-## Files
+## Project Structure
 
-| File | Description |
-|------|-------------|
-| `wordle.py` | Main solver with play/evaluate modes |
-| `merge.py` | Aggregates results from parallel runs |
+```
+wordle_solver/
+├── core/           # Core engine, CLI, setup
+├── guessers/       # Guessing algorithms
+├── checkers/       # Word validation
+├── interfaces/     # Interfaces
+├── modes/          # Game modes (simulation, interaction, evaluation)
+└── __main__.py     # Package entry point
+```
+
+| File/Directory | Description |
+|----------------|-------------|
+| `wordle_solver/` | Main package |
+| `helpers/` | Helper scripts (merge, progress) |
 | `parallel.sh` | Runs parallel evaluation batches |
 | `words.txt` | Word dictionary (~14,855 words) |
 | `logs/` | Output directory for evaluation logs |
 
 ## Usage
 
-### Solve for a specific word
+Run the solver using the Python module syntax:
+
+### Solve for a specific word (Simulation mode)
 ```bash
-python3 wordle.py -p <word>
+python3 -m wordle_solver -p <word>
 # or provide word when prompted:
-python3 wordle.py -p
+python3 -m wordle_solver -p
 ```
 
 ### Play interactively
 ```bash
-python3 wordle.py -i
+python3 -m wordle_solver -i
 ```
 
 ### Evaluate solver performance
 ```bash
 # Evaluate words 0-1000
-python3 wordle.py -e 0 1000
+python3 -m wordle_solver -e 0 1000
 
 # Run parallel evaluation (default: 15000 words, step 500)
 ./parallel.sh
