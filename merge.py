@@ -1,6 +1,6 @@
 files_count = int(input())
-failed = {}
-solved = {}
+failed: dict[int, int] = {}
+solved: dict[int, int] = {}
 
 for _ in range(files_count):
   failed_count = int(input())

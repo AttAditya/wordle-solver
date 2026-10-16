@@ -8,7 +8,7 @@ INTERVAL = 0.01
 LOG_DIR = "logs"
 
 while True:
-  percentages = []
+  percentages: list[float] = []
 
   for path in glob.glob(os.path.join(LOG_DIR, "*")):
     if not os.path.isfile(path):
